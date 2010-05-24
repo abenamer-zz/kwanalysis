@@ -1,0 +1,5 @@
+; $Id$
+name = "Keyword Analysis"
+description = "Extracts keywords from content."
+package = Content analysis
+core = 6.x
