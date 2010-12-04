@@ -59,8 +59,10 @@ function kwanalysis_analyzer($context, $analysis, $params) {
   
   $terms = kwanalysis_extract_autokeyword($context, $analysis);
   $out = '<ol>';
-  foreach($terms AS $t) {
-    $out .= "<li><span class=\"kwresearch_keyword\">$t</span></li>";
+  if (is_array($terms)) {
+    foreach($terms AS $t) {
+      $out .= "<li><span class=\"kwresearch_keyword\">$t</span></li>";
+    }
   }
   $out .= '</ol>';
   
@@ -70,13 +72,35 @@ function kwanalysis_analyzer($context, $analysis, $params) {
   
 }
 
-function kwanalysis_extract_autokeyword($context,&$analysis = NULL) {
-  $file = './' . drupal_get_path('module', 'kwanalysis') . '/lib/class.autokeyword.php';
-  if (!file_exists($file)) {
+function kwanalysis_extract_autokeyword($context, &$analysis = NULL) {
+  $files['module_path'] = './' . drupal_get_path('module', 'kwanalysis') . '/lib/class.autokeyword.php';
+  if (module_exists('libraries') && ($p = libraries_get_path('autokeyword'))) {
+    $files['libraries_path'] = './' . $p . '/class.autokeyword.php';
+  }
+  foreach ($files AS $f) {
+    if (file_exists($f)) {
+      $file = $f;
+      break;
+    }
+  }   
+  if (!$file) {
     $msg = t('The Keyword Analysis module requires class.autokeyword.php. ');
     $msg .= l(t('Download the class here.'),'http://www.phpclasses.org/package/3245-PHP-Automatically-suggest-keywords-from-content-text.html', array('attributes' => array('target' => '_phptextstats')));
     $msg .= "<br><br>";
-    $msg .= t(' Download the files and place them in a folder named "lib" under the readability module directory.');
+    if($files['libraries_path']) {
+       $msg .= t(' Download the files and place them in a folder named "autokeyword" under the libraries directory; %path.',
+        array(
+          '%path' => $files['libraries_path']
+        )
+      );     
+    }
+    else {
+      $msg .= t(' Download the files and place them in a folder named "lib" under the keyword analysis module directory; %path.',
+        array(
+          '%path' => $files['module_path']
+        )
+      );
+    }
     if($analysis) {
       $analysis['messages'][] = contentanalysis_format_message($msg, 'error');
     } else {
