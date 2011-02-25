@@ -1,4 +1,3 @@
-// $Id$
 /*
  * Implementation of hook_contentanalysis_data()
  * Gets the data from the custom fields to attach to the AJAX post data.
