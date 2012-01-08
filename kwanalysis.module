@@ -62,11 +62,7 @@ function kwanalysis_analyzer($context, $analysis, $params) {
   $items = array();
   if (is_array($terms)) {
     foreach ($terms as $t) {
-    	$items[] = array(
-    	  'data' => $t,
-    	  'arrtributes' => array('class' => 'kwresearch_keyword'),
-    	);
-      //$out .= "<li><span class=\"kwresearch_keyword\">$t</span></li>";
+    	$items[] = '<span class=\"kwresearch_keyword\">$t</span>';
     }
   }
   $vars = array(
@@ -144,7 +140,7 @@ function kwanalysis_extract_autokeyword($context, &$analysis = NULL) {
   $params['min_3words_phrase_occur'] = 2; //minimum occur of 3 words phrase 
 
   $keyword = new autokeyword($params, "iso-8859-1");
-dsm($keyword);
+//dsm($keyword);
   $term_vals = array();
 
   $terms1 = explode(', ', $keyword->parse_words());
