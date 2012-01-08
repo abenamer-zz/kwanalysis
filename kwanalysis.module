@@ -59,17 +59,41 @@ function kwanalysis_contentanalysis_analyzers() {
 function kwanalysis_analyzer($context, $analysis, $params) {
 
   $terms = kwanalysis_extract_autokeyword($context, $analysis);
+/*  
   $items = array();
   if (is_array($terms)) {
     foreach ($terms as $t) {
-    	$items[] = '<span class=\"kwresearch_keyword\">$t</span>';
+    	$items[] = "<span class=\"kwresearch_keyword\">{$t['term']}</span>";
     }
   }
   $vars = array(
     'items' => $items,
     'type' => 'ol',
   );
-  $out = theme('item_list', $vars);  
+  $out = theme('item_list', $vars); 
+*/ 
+
+  $rows = array();
+  $header = array(
+    array('data' => t('Term')),
+    array('data' => t('Relevance')),
+  );
+  if (is_array($terms)) {
+    foreach ($terms as $v) {
+      $rows[] = array(
+        "<span class=\"kwresearch_keyword\">" . $v['term'] . "</span>",
+        number_format($v['relevance'], 0),
+      );
+    }
+  }
+  if (!$rows) {
+    $rows[] = array(array(
+      'data' => t('No keywords available.'),
+      'colspan' => count($header),
+    ));
+  }
+
+  $out = theme('table', array('header' => $header, 'rows' => $rows));
 
   $analysis['content'][] = contentanalysis_format_content($out, -1);
 
@@ -168,7 +192,10 @@ function kwanalysis_extract_autokeyword($context, &$analysis = NULL) {
   $terms = array();
   $i = 1;
   foreach ($term_vals as $k => $v) {
-    $terms[] = $k;
+    $terms[] = array(
+      'term' => $k,
+      'relevance' => $v,
+    );   
     if ($i++ >= 20) {
       break;
     }
