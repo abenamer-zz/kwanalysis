@@ -6,7 +6,8 @@
  */
 
 /**
- * Implements hook_menu().().
+ * Implements hook_menu().
+().
  */
 function kwanalysis_menu() {
   $items = array();
@@ -44,7 +45,8 @@ function kwanalysis_contentanalysis_analyzers() {
 }
 
 /**
- * Implements hook_analyzer() via custom define callback().
+ * Implements hook_analyzer() via custom define callback
+().
  *
  * Performs the analysis.
  * callback is defined in hook_contentanalysis_analyzers ['callback']
@@ -163,7 +165,7 @@ function kwanalysis_extract_autokeyword($context, &$analysis = NULL) {
 
   $params['min_3words_phrase_occur'] = 2; //minimum occur of 3 words phrase 
 
-  $keyword = new autokeyword($params, "iso-8859-1");
+  $keyword = new autokeyword($params, "UTF-8");
 //dsm($keyword);
   $term_vals = array();
 
