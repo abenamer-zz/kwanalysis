@@ -28,6 +28,7 @@ function kwanalysis_menu() {
   return $items;
 }
 
+
 /**
  *  Implentation of hook_contentanalysis_analyzers()
  *  register kwanalysis with contentanalysis analyzers registry
